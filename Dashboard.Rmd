@@ -11,6 +11,7 @@ output:
 library(flexdashboard)
 library(readr)
 library(knitr)
+library(tidyverse)
 startrek <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-08-17/computer.csv')
 
 ```
