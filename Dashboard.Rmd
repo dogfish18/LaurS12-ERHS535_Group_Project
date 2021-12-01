@@ -53,5 +53,27 @@ Speech is now common in daily interactions with our devices, thanks to voice use
 ### Chart 5: Courtney
 
 ```{r}
+text <- startrek$interaction
+
+docs <- Corpus(VectorSource(text))
+
+docs <- docs %>%
+  tm_map(removeNumbers) %>%
+  tm_map(removePunctuation) %>%
+  tm_map(stripWhitespace)
+
+docs <- tm_map(docs, content_transformer(tolower))
+
+docs <- tm_map(docs, removeWords, stopwords("english"))
+
+dtm <- TermDocumentMatrix(docs)
+
+matrix <- as.matrix(dtm) 
+
+words <- sort(rowSums(matrix),decreasing = TRUE) 
+
+df <- data.frame(word = names(words), freq = words)
+
+wordcloud2(data=df, size=1.6, color='random-dark', shape = "cardoid")
 
 ```
