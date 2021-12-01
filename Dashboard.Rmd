@@ -43,10 +43,34 @@ Source: https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/202
 
 ```
 
-### Chart 3: Kayna
+### Primary Types of Voice Interactions with Computer
 
 ```{r}
+startrek$char <- as.factor(startrek$char)
+startrek$type <- as.factor(startrek$type)
+startrek$nv_resp <- as.factor(startrek$nv_resp)
 
+startrek$nv_resp <- startrek$nv_resp %>% 
+  recode_factor("TRUE" = "Non-Verbal Response") %>% 
+  recode_factor("FALSE" = "Verbal Response")
+
+no_comp_voice <- startrek %>%
+  filter(char != "Computer Voice") %>% 
+  filter(char != "Computer") %>% 
+  filter(char != "Computer (V.O.)") %>% 
+  filter(char != "Computer (V.O)") %>% 
+  filter(char != "Computer Voice (V.O.)") %>% 
+  filter(char != "New Computer Voice") %>% 
+  filter(char != "Com Panel (V.O.)") %>% 
+  filter(char != "Computer'S Voice") %>% 
+  filter(char != "Computer (Voice)") %>% 
+  filter(char != "Computer Voice (Cont'D)")
+
+
+no_comp_voice %>% 
+  ggplot()+
+  geom_bar(aes(x=pri_type))+
+  theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
 
 ***
@@ -55,7 +79,9 @@ When we interact with voice-command technology, we use certain types of interact
 
 When our technology or system interacts with us, it uses similar types of interactions to 'clarify' ("What song would you like to hear?"), indicate that something is 'in progress' ("Let me find that for you..."), have 'conversation' ("You are welcome"), and other types of interactions.
 
-On the Starship Enterprise, the crew interacts with the computer, and the computer interacts with the crew, through different 'Interaction Types'. These are organized by person (the person interacting with the computer) and by computer (the computer interacting with the person). Definitions and examples of these interaction types can be found below. 
+These interaction types can exist in a chain, such as "Hey Siri, Play a song on Spotify". However, the primary type of interaction in this phrase is the command to have Siri play a song on Spotify. 
+
+On the Starship Enterprise, the crew interacts with the computer, and the computer interacts with the crew, through different primary 'Interaction Types'. These are organized by person (the person interacting with the computer) and by computer (the computer interacting with the person). Definitions and examples of these interaction types can be found below. 
 
 By Person:
 
@@ -82,7 +108,7 @@ By Computer:
 | 6    | In Progress   | Utterances that indicates that a process is ongoing or updates on that process.                                                      | Accessing.                                                |
 | 7    | Conversation  | Utterances that are more like human conversation, such as phatic espressions, formalities, and colloquial speech.                    | You're more than welcome,  Commander Riker.               |
 
-Because the computer on the Starship Enterprise can generate objects and display information without responding, it is of interest to examine the proportion of occurrences when the computer responds non-verbally or with actions (versus with 'By Computer' interactions). The visualization to the left shows frequency of each interaction type by person, and frequency of subsequent interaction by computer via verbal and non-verbal response rates.
+Because the computer on the Starship Enterprise can generate objects and display information without responding, it is of interest to examine the proportion of occurrences when the computer responds non-verbally or with actions (versus with 'By Computer' interactions). The visualization to the left shows frequency of each primary interaction type by person, and frequency of subsequent primary interaction type by computer via verbal and non-verbal response rates. Frequency of the primary interaction type when the computer has a verbal response is also found in this figure.
 
 Source: http://www.speechinteraction.org/TNG/TeaEarlGreyHotDatasetCodeBook.pdf
 
