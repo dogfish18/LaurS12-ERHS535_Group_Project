@@ -14,27 +14,44 @@ startrek <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytues
 
 ```
 
-Column {data-width=650}
------------------------------------------------------------------------
 
-### Chart A
+### Data description
 
 ```{r}
 
 ```
 
-Column {data-width=350}
------------------------------------------------------------------------
+***
 
-### Chart B
+- insert description of data
 
-```{r}
 
-```
-
-### Chart C
+### Chart 1: Lauren
 
 ```{r}
 
 ```
 
+### Chart 2: Kim
+
+```{r}
+
+```
+
+### Chart 3: Kayna
+
+```{r}
+
+```
+
+### Chart 4: Stacey
+
+```{r}
+
+```
+
+### Chart 5: Courtney
+
+```{r}
+
+```
