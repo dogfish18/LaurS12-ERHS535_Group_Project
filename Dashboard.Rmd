@@ -44,17 +44,9 @@ Source: https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/202
 
 ```
 
-### Primary Types of Voice Interactions with Computer
+### Verbal vs. Non-Verbal Computer Response Proportions per Primary Types of Voice Interactions By Person
 
 ```{r}
-startrek$char <- as.factor(startrek$char)
-startrek$type <- as.factor(startrek$type)
-startrek$nv_resp <- as.factor(startrek$nv_resp)
-
-startrek$nv_resp <- startrek$nv_resp %>% 
-  recode_factor("TRUE" = "Non-Verbal Response") %>% 
-  recode_factor("FALSE" = "Verbal Response")
-
 no_comp_voice <- startrek %>%
   filter(char != "Computer Voice") %>% 
   filter(char != "Computer") %>% 
@@ -67,11 +59,36 @@ no_comp_voice <- startrek %>%
   filter(char != "Computer (Voice)") %>% 
   filter(char != "Computer Voice (Cont'D)")
 
+no_comp_voice <- no_comp_voice %>% 
+  select('pri_type', 'nv_resp')
 
-no_comp_voice %>% 
-  ggplot()+
-  geom_bar(aes(x=pri_type))+
-  theme(axis.text.x = element_text(angle = 45, hjust=1))
+no_comp_voice$nv_resp <- as.factor(no_comp_voice$nv_resp)
+no_comp_voice$pri_type <- as.factor(no_comp_voice$pri_type)
+
+no_comp_voice$nv_resp <- no_comp_voice$nv_resp %>% 
+  recode_factor("TRUE" = "Non-Verbal Response") %>% 
+  recode_factor("FALSE" = "Verbal Response")
+
+levels(no_comp_voice$pri_type)
+
+no_comp_voice <- no_comp_voice %>% 
+  group_by(pri_type, nv_resp) %>% 
+  tally()
+
+no_comp_voice <- no_comp_voice %>% 
+  pivot_wider(names_from = nv_resp, values_from = n)
+
+no_comp_voice[is.na(no_comp_voice)] = 0
+
+no_comp_voice
+
+#no_comp_voice %>% 
+  #ggplot()+
+  #geom_bar(aes(x=nv_resp))+
+  #theme(axis.text.x = element_text(angle = 45, hjust=1))+
+  #labs(x= "Primary Voice Command Interaction Type, By Person to Computer",
+       #y= "")
+  
 ```
 
 ***
