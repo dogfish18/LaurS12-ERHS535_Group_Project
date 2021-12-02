@@ -171,6 +171,6 @@ words <- sort(rowSums(matrix),decreasing = TRUE)
 df <- data.frame(word = names(words), freq = words)
 
 # Wordcloud
-wordcloud2(data=df, size=1.6, color='random-dark', shape = "cardoid")
+wordcloud2(data = df, size = 3, color= "random-light", shape = "cardoid", backgroundColor = "black")
 
 ```
