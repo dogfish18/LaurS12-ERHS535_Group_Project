@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Tea, Earl Grey, Hot: Designing Speech Interactions from the Imagined Ideal of Star Trek"
 output: 
   flexdashboard::flex_dashboard:
     storyboard: true
@@ -20,7 +20,7 @@ startrek <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytues
 ```
 
 
-### Tea, Earl Grey, Hot: Designing Speech Interactions from the Imagined Ideal of Star Trek
+### Data Description
 
 ```{r}
 include_graphics('https://raw.githubusercontent.com/LaurS12/ERHS535_Group_Project/main/Images/data_description.png')
@@ -32,7 +32,7 @@ include_graphics('https://raw.githubusercontent.com/LaurS12/ERHS535_Group_Projec
 
 Speech is now common in daily interactions with our devices, thanks to voice user interfaces (VUIs) like Alexa. Despite their seeming ubiquity, designs often do not match users’ expectations. Science fiction, which is known to influence design of new technologies, has included VUIs for decades. Star Trek: The Next Generation is a prime example of how people envisioned ideal VUIs. Understanding how current VUIs live up to Star Trek’s utopian technologies reveals mismatches between current designs and user expectations, as informed by popular fiction. Combining conversational analysis and VUI user analysis, we study voice interactions with the Enterprise’s computer and compare them to current interactions. Independent of futuristic computing power, we find key design-based differences: Star Trek interactions are brief and functional, not conversational, they are highly multimodal and context-driven, and there is often no spoken computer response. From this, we suggest paths to better align VUIs with user expectations.
 
-Source: https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-08-17/readme.md
+Data source: https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-08-17/readme.md
 
 
 ### Chart 1: Lauren
@@ -47,7 +47,7 @@ Source: https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/202
 
 ```
 
-### Verbal vs. Non-Verbal Computer Response Proportions per Primary Types of Voice Interactions By Person
+### Verbal vs. Non-Verbal Computer Responses per Primary Types of Voice Interactions
 
 ```{r, results='hide'}
 no_comp_voice <- startrek %>%
@@ -212,7 +212,7 @@ The visualizations to the left shows the proportion of verbal versus non-verbal 
 
 Via the data visualizations created from proportion tests, we can see that Wake Word, Question, Password, and Conversations interactions are most likely to result in a Verbal response from the Computer, and Statement, Comment, and COmmand interactions were found to result in either Verbal or Non-Verbal Computer response fairly equally. One limitation of this analysis is that sample size for certain combinations of interactions and responses are low.
 
-Source: http://www.speechinteraction.org/TNG/TeaEarlGreyHotDatasetCodeBook.pdf
+Data source: http://www.speechinteraction.org/TNG/TeaEarlGreyHotDatasetCodeBook.pdf
 
 ### Chart 4: Stacey
 
