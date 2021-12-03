@@ -12,6 +12,9 @@ library(flexdashboard)
 library(readr)
 library(knitr)
 library(tidyverse)
+library(purrr)
+library(broom)
+library(plotly)
 startrek <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-08-17/computer.csv')
 
 ```
@@ -46,7 +49,7 @@ Source: https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/202
 
 ### Verbal vs. Non-Verbal Computer Response Proportions per Primary Types of Voice Interactions By Person
 
-```{r}
+```{r, results='hide'}
 no_comp_voice <- startrek %>%
   filter(char != "Computer Voice") %>% 
   filter(char != "Computer") %>% 
@@ -80,16 +83,110 @@ no_comp_voice <- no_comp_voice %>%
 
 no_comp_voice[is.na(no_comp_voice)] = 0
 
+no_comp_voice <- no_comp_voice %>% 
+  rename(n_verbal = "Verbal Response") %>% 
+  rename(n_non_verbal = "Non-Verbal Response")
+
+no_comp_voice$total_resp <- no_comp_voice$n_verbal + no_comp_voice$n_non_verbal
+
 no_comp_voice
 
-#no_comp_voice %>% 
-  #ggplot()+
-  #geom_bar(aes(x=nv_resp))+
-  #theme(axis.text.x = element_text(angle = 45, hjust=1))+
-  #labs(x= "Primary Voice Command Interaction Type, By Person to Computer",
-       #y= "")
-  
+prop_verbal <- no_comp_voice %>% 
+  mutate(prop_test = purrr::map2(.x= n_verbal,
+                                 .y= total_resp,
+                                 .f= prop.test))
+
+
+prop_verbal <- prop_verbal %>% 
+  mutate(prop_tidy = purrr::map(prop_test, ~tidy(.x)))
+
+prop_non_verbal <- no_comp_voice %>% 
+  mutate(prop_test = purrr::map2(.x= n_non_verbal,
+                                 .y= total_resp,
+                                 .f= prop.test))
+
+
+prop_non_verbal <- prop_non_verbal %>% 
+  mutate(prop_tidy = purrr::map(prop_test, ~tidy(.x)))
+
+prop_verbal <- prop_verbal%>% 
+  unnest(prop_tidy)
+
+prop_non_verbal <- prop_non_verbal%>% 
+  unnest(prop_tidy)
+
+prop_verbal <- prop_verbal %>% 
+  select(-prop_test)
+
+prop_non_verbal <- prop_non_verbal %>% 
+  select(-prop_test)
+
+prop_verbal <- prop_verbal %>% 
+  select(pri_type, estimate, conf.low, conf.high, n_verbal) 
+
+prop_non_verbal <- prop_non_verbal %>% 
+  select(pri_type, estimate, conf.low, conf.high, n_non_verbal) 
+
+prop_verbal <- prop_verbal %>% 
+  mutate(estimate = as.numeric(estimate),
+         conf.low = as.numeric(conf.low),
+         conf.high = as.numeric(conf.high))
+
+prop_non_verbal <- prop_non_verbal %>% 
+  mutate(estimate = as.numeric(estimate),
+         conf.low = as.numeric(conf.low),
+         conf.high = as.numeric(conf.high))
+
+prop_verbal <- prop_verbal %>% 
+  arrange(desc(estimate))
+
+prop_non_verbal <- prop_non_verbal %>% 
+  arrange(desc(estimate))
+
+prop_verbal$resp <- "Verbal"
+prop_non_verbal$resp <- "Non-Verbal"
+
+resp_per_int <- rbind(prop_verbal, prop_non_verbal)
+
+resp_per_int[is.na(resp_per_int)] = 0
+
+resp_per_int$n <- resp_per_int$n_non_verbal + resp_per_int$n_verbal
+
+resp_per_int <- resp_per_int %>% 
+  select(-n_non_verbal) %>% 
+  select(-n_verbal)
+
+resp_per_int$resp <- as.factor(resp_per_int$resp)
+
+resp_per_int
 ```
+
+```{r}
+chart_3 <- resp_per_int %>%
+  ungroup() %>% 
+  mutate(pri_type = fct_reorder(pri_type, estimate)) %>% 
+  ggplot(aes(label=conf.low, 
+             label2=conf.high,
+             label3=n))+
+  geom_point(aes(x=estimate, y=pri_type, color=resp))+
+  geom_errorbarh(aes(xmax = conf.high, 
+                     xmin = conf.low, 
+                     y = pri_type,
+                     color=resp), height=0)+
+  labs(title= "Proportions of Computer Response Type",
+       y= "Person Interaction Type",
+       x= "Percent of Responses",
+       subtitle = "Bars show 95% confidence interval",
+       color = "")+
+  scale_x_continuous(labels = scales::percent)+
+  theme(plot.title = element_text(hjust = -0.45, vjust=2.12))+
+  theme_bw()
+
+#chart_3 
+
+ggplotly(chart_3) 
+```
+
 
 ***
 
@@ -99,25 +196,21 @@ These interaction types can exist in a chain, such as "Hey Siri, Play a song on 
 
 On the Starship Enterprise, the crew interacts with the Computer through different primary 'Interaction Types'. Definitions and examples of these interaction types can be found below. 
 
-By Person:
-
-| Person       | Definition                                                                                                        | Examples                                                |
-|--------------|-------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| Command      | Utterances that directly tell the computer what to do.                                                            | Run a diagnostic on the port nacelle.                   |
-| Question     | Utterances that ask the computer for something.                                                                   | Where is Captain Picard?                                |
-| Statement    | Utterances tell don't tell the computer or ask it, but meaning is inferred.                                       | Deck four. I wish to learn about Earth.                 |
-| Password     | Utterances that contain a password.                                                                               | This is Captain Picard.                                 |
-| Wake Word    | Key phrases used to activate the computer.                                                                        | Computer. Holodeck.                                     |
-| Comment      | Utterances that have no intended action for the computer.                                                         | Excellent. Ferrazene has a complex molecular structure. |
-| Conversation | Utterances that are more like human conversation, such as phatic espressions, formalities, and colloquial speech. | Well, check it again! Then run it for us, dear.         |
-
-
+| Interaction Type | Definition                                                                                                        | Examples                                                |
+|------------------|-------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
+| Command          | Utterances that directly tell the computer what to do.                                                            | Run a diagnostic on the port nacelle.                   |
+| Question         | Utterances that ask the computer for something.                                                                   | Where is Captain Picard?                                |
+| Statement        | Utterances tell don't tell the computer or ask it, but meaning is inferred.                                       | Deck four. I wish to learn about Earth.                 |
+| Password         | Utterances that contain a password.                                                                               | This is Captain Picard.                                 |
+| Wake Word        | Key phrases used to activate the computer.                                                                        | Computer. Holodeck.                                     |
+| Comment          | Utterances that have no intended action for the computer.                                                         | Excellent. Ferrazene has a complex molecular structure. |
+| Conversation     | Utterances that are more like human conversation, such as phatic espressions, formalities, and colloquial speech. | Well, check it again! Then run it for us, dear.         |
 
 Because the Computer on the Starship Enterprise can generate objects and display information without responding, it is of interest to examine the proportion of occurrences when the computer responds verbally or non-verbally (which includes through actions only). 
 
 The visualizations to the left shows the proportion of verbal versus non-verbal responses, according to interaction type by person. This information can help us understand what types of interactions are more likely to result in verbal or non-verbal responses from the Starship Enterprise Computer. 
 
-From the data visualizations, we can see that Question and Password interactions are most likely to result in a Verbal response from the Computer, whereas all other types of interactions may result in either Verbal or Non-Verbal Computer response fairly equally.
+Via the data visualizations created from proportion tests, we can see that Wake Word, Question, Password, and Conversations interactions are most likely to result in a Verbal response from the Computer, and Statement, Comment, and COmmand interactions were found to result in either Verbal or Non-Verbal Computer response fairly equally. One limitation of this analysis is that sample size for certain combinations of interactions and responses are low.
 
 Source: http://www.speechinteraction.org/TNG/TeaEarlGreyHotDatasetCodeBook.pdf
 
