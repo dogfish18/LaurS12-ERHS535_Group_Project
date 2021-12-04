@@ -9,22 +9,24 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+```{ r setup}
+library(readr)
+library(dplyr)
+startrek<- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-08-17/computer.csv")
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
 ```
 
-## Including Plots
+``` {r season_column}
+# 1: 26, 2: 48, 3: 74, 4: 100, 5: 126, 6: 152, 7: 178
+favthings <- startrek %>%
+  mutate(season = case_when(name < 127 ~ '1',
+                            name < 149 ~ '2', 
+                            name < 175 ~ '3',
+                            name < 201 ~ '4',
+                            name < 227 ~ '5',
+                            name < 253 ~ '6',
+                            name < 279 ~ '7'))
+  
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
