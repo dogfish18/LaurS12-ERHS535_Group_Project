@@ -31,4 +31,7 @@ favthings <- startrek %>%
 
 ``` {r select_domains}
 favthings <- favthings %>%
-  filter(sub_domain %in% c("Holodeck", "Replicator", "Music"))
+  filter(sub_domain %in% c("Holodeck", "Replicator", "Music")) %>%
+  filter(char %in% c("Beverly", "Data", "Geordi", "Picard", "Riker", "Troi", "Worf"))
+
+```
