@@ -27,6 +27,8 @@ favthings <- startrek %>%
                             name < 253 ~ '6',
                             name < 279 ~ '7'))
   
-
 ```
 
+``` {r select_domains}
+favthings <- favthings %>%
+  filter(sub_domain %in% c("Holodeck", "Replicator", "Music"))
