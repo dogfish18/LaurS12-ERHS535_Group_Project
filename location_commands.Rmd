@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{ r setup}
 library(readr)
 library(dplyr)
+library(ggplot2)
 startrek<- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-08-17/computer.csv")
 
 ```
@@ -34,4 +35,10 @@ favthings <- favthings %>%
   filter(sub_domain %in% c("Holodeck", "Replicator", "Music")) %>%
   filter(char %in% c("Beverly", "Data", "Geordi", "Picard", "Riker", "Troi", "Worf"))
 
+```
+
+``` {r chartidea}
+#attempting to do heatmap
+freqmap <- ggplot(favthings, aes(sub_domain, char))
+freqmap
 ```
