@@ -41,7 +41,8 @@ favthings <- favthings %>%
 ``` {r frequencyvector}
 freqcom <- favthings %>%
   group_by(char, sub_domain, season) %>%
-  count()
+  count() %>%
+  arrange(desc(char))
 summarise(freqcom)
 
 ```
