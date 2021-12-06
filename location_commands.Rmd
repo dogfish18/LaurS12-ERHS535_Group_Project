@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(readr)
 library(dplyr)
 library(ggplot2)
+library(forcats)
 startrek<- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-08-17/computer.csv")
 
 ```
@@ -42,7 +43,7 @@ favthings <- favthings %>%
 freqcom <- favthings %>%
   group_by(char, sub_domain, season) %>%
   count() %>%
-  arrange(desc(char))
+  arrange(desc(char, sub_domain))
 summarise(freqcom)
 
 ```
@@ -51,7 +52,8 @@ summarise(freqcom)
 #attempting to do heatmap
 freqmap <- ggplot(freqcom, aes(season, char)) +
   geom_tile(aes(fill = n)) +
-  facet_wrap(~ sub_domain)
+  facet_wrap(~ fct_reorder(sub_domain, char)
 freqmap
+
 #move color under this is under
 ```
