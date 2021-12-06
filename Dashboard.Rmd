@@ -5,6 +5,7 @@ output:
     storyboard: true
     social: menu
     source: embed
+    theme: spacelab
 ---
 
 ```{r setup, include=FALSE}
@@ -158,32 +159,28 @@ resp_per_int <- resp_per_int %>%
 
 resp_per_int$resp <- as.factor(resp_per_int$resp)
 
-resp_per_int
+resp_per_int$pri_type <- factor(resp_per_int$pri_type, levels = c("Password", "Conversation", "Question", "Wake Word", "Comment", "Command", "Statement"))
 ```
 
-```{r}
+```{r, include=FALSE}
 chart_3 <- resp_per_int %>%
   ungroup() %>% 
-  mutate(pri_type = fct_reorder(pri_type, estimate)) %>% 
   ggplot(aes(label=conf.low, 
              label2=conf.high,
              label3=n))+
-  geom_point(aes(x=estimate, y=pri_type, color=resp, size=5))+
-  geom_errorbarh(aes(xmax = conf.high, 
-                     xmin = conf.low, 
-                     y = pri_type,
-                     color=resp), height=0)+
+  geom_col(aes(x=estimate, y=pri_type, fill=resp), position="fill")+
   labs(title= "Proportions of Computer Response Type",
        y= "Person Interaction Type",
        x= "Percent of Responses",
        subtitle = "Bars show 95% confidence interval",
-       color = "")+
+       fill = "")+
   scale_x_continuous(labels = scales::percent)+
+  scale_fill_brewer(palette = "Paired")
   theme(plot.title = element_text(hjust = -0.45, vjust=2.12))+
   theme_bw()
+```
 
-#chart_3 
-
+```{r}
 ggplotly(chart_3) 
 ```
 
