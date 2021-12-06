@@ -31,14 +31,26 @@ favthings <- startrek %>%
 ```
 
 ``` {r select_domains}
+table(favthings$char)
 favthings <- favthings %>%
   filter(sub_domain %in% c("Holodeck", "Replicator", "Music")) %>%
   filter(char %in% c("Beverly", "Data", "Geordi", "Picard", "Riker", "Troi", "Worf"))
 
 ```
 
+``` {r frequencyvector}
+freqcom <- favthings %>%
+  group_by(char, sub_domain, season) %>%
+  count()
+summarise(freqcom)
+
+```
+
 ``` {r chartidea}
 #attempting to do heatmap
-freqmap <- ggplot(favthings, aes(sub_domain, char))
+freqmap <- ggplot(freqcom, aes(season, char)) +
+  geom_tile(aes(fill = n)) +
+  facet_wrap(~ sub_domain)
 freqmap
+#move color under this is under
 ```
