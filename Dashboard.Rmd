@@ -217,7 +217,7 @@ Data source: http://www.speechinteraction.org/TNG/TeaEarlGreyHotDatasetCodeBook.
 
 ```
 
-### Chart 5: Courtney
+### How common is each word?
 
 ```{r}
 # Packages
@@ -252,6 +252,12 @@ words <- sort(rowSums(matrix),decreasing = TRUE)
 df <- data.frame(word = names(words), freq = words)
 
 # Wordcloud
-wordcloud2(data = df, size = 3, color= "random-light", shape = "cardoid", backgroundColor = "black")
+wordcloud2(data = df, size = 2, color= "random-light", shape = "circle", backgroundColor = "black")
 
 ```
+
+*** 
+
+When looking at text, something that may come up is how common our choice of words can be. A great way to visualize this idea is with word clouds! A bundle of words with varying size, related to how often that word was used. 
+
+This image was created using the spoken lines from all of the characters and each word was individually counted. Interestingly, "program" appears to be the most common word with 193 uses, however, the most used word was "computer"  with 1036 uses. Wouldn't be much of a word cloud when a single word is the cloud. By removing the extreme outlier we were able to make a beautiful image that visualizes the Star Trek speech.
