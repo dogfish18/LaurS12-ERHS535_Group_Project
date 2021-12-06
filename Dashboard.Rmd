@@ -168,7 +168,7 @@ chart_3 <- resp_per_int %>%
   ggplot(aes(label=conf.low, 
              label2=conf.high,
              label3=n))+
-  geom_point(aes(x=estimate, y=pri_type, color=resp))+
+  geom_point(aes(x=estimate, y=pri_type, color=resp, size=5))+
   geom_errorbarh(aes(xmax = conf.high, 
                      xmin = conf.low, 
                      y = pri_type,
