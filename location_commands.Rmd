@@ -43,17 +43,16 @@ favthings <- favthings %>%
 freqcom <- favthings %>%
   group_by(char, sub_domain, season) %>%
   count() %>%
-  arrange(desc(char, sub_domain))
+  arrange(desc(n, char))
 summarise(freqcom)
 
 ```
 
 ``` {r chartidea}
-#attempting to do heatmap
 freqmap <- ggplot(freqcom, aes(season, char)) +
   geom_tile(aes(fill = n)) +
-  facet_wrap(~ fct_reorder(sub_domain, char)
+  facet_wrap(~ fct_reorder(sub_domain, n))
+
 freqmap
 
-#move color under this is under
 ```
