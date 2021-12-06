@@ -50,8 +50,8 @@ summarise(freqcom)
 
 ``` {r chartidea}
 freqmap <- ggplot(freqcom, aes(season, char)) +
-  geom_tile(aes(fill = n)) +
-  facet_wrap(~ fct_reorder(sub_domain, n))
+  geom_tile(aes(fill = fct_reorder(n)) +
+  facet_wrap(~ sub_domain)
 
 freqmap
 
