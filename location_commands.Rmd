@@ -41,11 +41,13 @@ favthings <- favthings %>%
 
 ``` {r frequencyvector}
 freqcom <- favthings %>%
-  group_by(char, sub_domain, season) %>%
+  group_by(char, season) %>%
   count() %>%
   arrange(desc(n, char))
 summarise(freqcom)
 
+#take out sub domain to see if it works
+#it didn't work
 ```
 
 ``` {r chartidea}
