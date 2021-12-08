@@ -181,7 +181,7 @@ chart_3 <- resp_per_int %>%
 ```
 
 ```{r}
-ggplotly(chart_3) 
+ggplotly(chart_3, height=300, width=700) 
 ```
 
 
@@ -207,7 +207,7 @@ Because the Computer on the Starship Enterprise can generate objects and display
 
 The visualizations to the left shows the proportion of verbal versus non-verbal responses, according to interaction type by person. This information can help us understand what types of interactions are more likely to result in verbal or non-verbal responses from the Starship Enterprise Computer. 
 
-Via the data visualizations created from proportion tests, we can see that Wake Word, Question, Password, and Conversations interactions are most likely to result in a Verbal response from the Computer, and Statement, Comment, and COmmand interactions were found to result in either Verbal or Non-Verbal Computer response fairly equally. One limitation of this analysis is that sample size for certain combinations of interactions and responses are low.
+Via the data visualizations created from proportion tests, we can see that Wake Word, Question, Conversation, and Password interactions are most likely to result in a Verbal response from the Computer, and Statement, Command, Comment interactions were found to result in either Verbal or Non-Verbal Computer response fairly equally. One limitation of this analysis is that sample size for certain combinations of interactions and responses are low.
 
 Data source: http://www.speechinteraction.org/TNG/TeaEarlGreyHotDatasetCodeBook.pdf
 
@@ -218,6 +218,32 @@ Data source: http://www.speechinteraction.org/TNG/TeaEarlGreyHotDatasetCodeBook.
 ```
 
 ### How common is each word?
+```{r, results='hide', include=FALSE}
+comp_voice <- startrek %>%
+  filter(char == "Computer Voice") %>% 
+  filter(char == "Computer") %>% 
+  filter(char == "Computer (V.O.)") %>% 
+  filter(char == "Computer (V.O)") %>% 
+  filter(char == "Computer Voice (V.O.)") %>% 
+  filter(char == "New Computer Voice") %>% 
+  filter(char == "Com Panel (V.O.)") %>% 
+  filter(char == "Computer'S Voice") %>% 
+  filter(char == "Computer (Voice)") %>% 
+  filter(char == "Computer Voice (Cont'D)")
+
+person_voice <- startrek %>%
+  filter(char != "Computer Voice") %>% 
+  filter(char != "Computer") %>% 
+  filter(char != "Computer (V.O.)") %>% 
+  filter(char != "Computer (V.O)") %>% 
+  filter(char != "Computer Voice (V.O.)") %>% 
+  filter(char != "New Computer Voice") %>% 
+  filter(char != "Com Panel (V.O.)") %>% 
+  filter(char != "Computer'S Voice") %>% 
+  filter(char != "Computer (Voice)") %>% 
+  filter(char != "Computer Voice (Cont'D)")
+
+```
 
 ```{r}
 # Packages
@@ -227,33 +253,61 @@ library(wordcloud2)
 library(tm)
 library(tidyverse)
 
+#computer lines only
 # Filter to necessary column
-text <- startrek$interaction
+textcomp <- comp_voice$interaction
 
 # Clean text
-docs <- Corpus(VectorSource(text))
+docscomp <- Corpus(VectorSource(textcomp))
 
-docs <- docs %>%
+docscomp <- docscomp %>%
   tm_map(removeNumbers) %>%
   tm_map(removePunctuation) %>%
   tm_map(stripWhitespace)
 
-docs <- tm_map(docs, content_transformer(tolower))
+docscomp <- tm_map(docscomp, content_transformer(tolower))
 
-docs <- tm_map(docs, removeWords, stopwords("english"))
+docscomp <- tm_map(docscomp, removeWords, stopwords("english"))
 
 # Create matrix with counts
-dtm <- TermDocumentMatrix(docs)
+dtmcomp <- TermDocumentMatrix(docscomp)
 
-matrix <- as.matrix(dtm) 
+matrixcomp <- as.matrix(dtmcomp) 
 
-words <- sort(rowSums(matrix),decreasing = TRUE) 
+wordscomp <- sort(rowSums(matrix),decreasing = TRUE) 
 
-df <- data.frame(word = names(words), freq = words)
+dfcomp <- data.frame(word = names(words), freq = words)
 
 # Wordcloud
-wordcloud2(data = df, size = 2, color= "random-light", shape = "circle", backgroundColor = "black")
+wordcloud2(data = dfcomp, size = 2, color= "random-light", shape = "circle", backgroundColor = "black")
 
+#person lines only
+# Filter to necessary column
+textperson <- person_voice$interaction
+
+# Clean text
+docsperson <- Corpus(VectorSource(textperson))
+
+docsperson <- docsperson %>%
+  tm_map(removeNumbers) %>%
+  tm_map(removePunctuation) %>%
+  tm_map(stripWhitespace)
+
+docsperson <- tm_map(docsperson, content_transformer(tolower))
+
+docsperson <- tm_map(docsperson, removeWords, stopwords("english"))
+
+# Create matrix with counts
+dtmperson <- TermDocumentMatrix(docsperson)
+
+matrixperson <- as.matrix(dtmperson) 
+
+wordscomp <- sort(rowSums(matrix),decreasing = TRUE) 
+
+dfperson <- data.frame(word = names(words), freq = words)
+
+# Wordcloud
+wordcloud2(data = dfperson, size = 2, color= "random-light", shape = "circle", backgroundColor = "black")
 ```
 
 *** 
