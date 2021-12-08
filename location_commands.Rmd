@@ -52,9 +52,10 @@ summarise(freqcom)
 
 ``` {r chartidea}
 freqmap <- ggplot(freqcom, aes(season, char)) +
-  geom_tile(aes(fill = fct_reorder(n)) +
+  geom_tile(aes(fill = n)) +
   facet_wrap(~ sub_domain)
 
 freqmap
 
+#changed aes fill back to n after trying fct_reorder b/c that's not the y-axis
 ```
