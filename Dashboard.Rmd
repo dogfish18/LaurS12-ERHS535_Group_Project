@@ -324,10 +324,10 @@ dfcomp <- data.frame(word = names(wordscomp), freq = wordscomp)
 # Wordcloud
 compcloud<-wordcloud2(data = dfcomp, size = 0.5, color= "random-light", shape= "circle", backgroundColor = "black")
 
-#library(htmlwidgets)
-#webshot::install_phantomjs()
-#saveWidget(compcloud,"1.html",selfcontained = F)
-#webshot::webshot("1.html","1.png",vwidth = 700, vheight = 500, delay =10)
+library(htmlwidgets)
+webshot::install_phantomjs()
+saveWidget(compcloud,"1.html",selfcontained = F)
+webshot::webshot("1.html","1.png",vwidth = 700, vheight = 500, delay =10)
 ```
 
 *** 
