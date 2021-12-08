@@ -41,9 +41,10 @@ favthings <- favthings %>%
 
 ``` {r frequencyvector}
 freqcom <- favthings %>%
-  group_by(char, season) %>%
+  group_by(char, sub_domain, season) %>%
   count() %>%
-  arrange(desc(n, char))
+  ungroup()%>%
+  mutate(char = fct_reorder(char, n, .fun=sum))
 summarise(freqcom)
 
 #take out sub domain to see if it works
