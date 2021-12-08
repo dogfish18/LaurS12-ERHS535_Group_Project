@@ -16,8 +16,12 @@ library(tidyverse)
 library(purrr)
 library(broom)
 library(plotly)
-startrek <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-08-17/computer.csv')
+library(wordcloud)
+library(RColorBrewer)
+library(tm)
+library(wordcloud2)
 
+startrek <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-08-17/computer.csv')
 ```
 
 
@@ -217,19 +221,20 @@ Data source: http://www.speechinteraction.org/TNG/TeaEarlGreyHotDatasetCodeBook.
 
 ```
 
-### How common is each word?
+***
+
+
+
 ```{r, results='hide', include=FALSE}
+
+#Courtney data cleaning
+
 comp_voice <- startrek %>%
-  filter(char == "Computer Voice") %>% 
-  filter(char == "Computer") %>% 
-  filter(char == "Computer (V.O.)") %>% 
-  filter(char == "Computer (V.O)") %>% 
-  filter(char == "Computer Voice (V.O.)") %>% 
-  filter(char == "New Computer Voice") %>% 
-  filter(char == "Com Panel (V.O.)") %>% 
-  filter(char == "Computer'S Voice") %>% 
-  filter(char == "Computer (Voice)") %>% 
-  filter(char == "Computer Voice (Cont'D)")
+  filter(char == c("Computer Voice", "Computer", "Computer (V.O.)", 
+         "Computer (V.O)", "Computer Voice (V.O.)", "New Computer Voice", 
+         "Com Panel (V.O.)", "Computer'S Voice", "Computer (Voice)", 
+         "Computer Voice (Cont'D)"))
+
 
 person_voice <- startrek %>%
   filter(char != "Computer Voice") %>% 
@@ -245,13 +250,50 @@ person_voice <- startrek %>%
 
 ```
 
+
+
+### How common is each word used by the characters?
 ```{r}
-# Packages
-library(wordcloud)
-library(RColorBrewer)
-library(wordcloud2)
-library(tm)
-library(tidyverse)
+#person lines only
+# Filter to necessary column
+textperson <- person_voice$interaction
+
+# Clean text
+docsperson <- Corpus(VectorSource(textperson))
+
+docsperson <- docsperson %>%
+  tm_map(removeNumbers) %>%
+  tm_map(removePunctuation) %>%
+  tm_map(stripWhitespace)
+
+docsperson <- tm_map(docsperson, content_transformer(tolower))
+
+docsperson <- tm_map(docsperson, removeWords, stopwords("english"))
+
+# Create matrix with counts
+dtmperson <- TermDocumentMatrix(docsperson)
+
+matrixperson <- as.matrix(dtmperson) 
+
+wordsperson <- sort(rowSums(matrixperson),decreasing = TRUE) 
+
+dfperson <- data.frame(word = names(wordsperson), freq = wordsperson)
+
+# Wordcloud
+wordcloud2(data = dfperson, size = 2, color= "random-light", shape = "circle", backgroundColor = "black")
+```
+
+***
+NEEDS NUMBER EDITING
+
+When looking at text, something that may come up is how common our choice of words can be. A great way to visualize this idea is with word clouds! A bundle of words with varying size, related to how often that word was used. 
+
+This image was created using the spoken lines from all of the characters (except the computer) and each word was individually counted. Interestingly, "program" appears to be the most common word with 193 uses, however, the most used word was "computer"  with 1036 uses. Wouldn't be much of a word cloud when a single word is the cloud. By removing the extreme outlier we were able to make a beautiful image that visualizes the Star Trek speech.
+
+### How common is each word used by the computer?
+```{r}
+# Packages (moved to top)
+
 
 #computer lines only
 # Filter to necessary column
@@ -274,44 +316,23 @@ dtmcomp <- TermDocumentMatrix(docscomp)
 
 matrixcomp <- as.matrix(dtmcomp) 
 
-wordscomp <- sort(rowSums(matrix),decreasing = TRUE) 
+wordscomp <- sort(rowSums(matrixcomp),decreasing = TRUE) 
 
-dfcomp <- data.frame(word = names(words), freq = words)
+dfcomp <- data.frame(word = names(wordscomp), freq = wordscomp)
 
-# Wordcloud
-wordcloud2(data = dfcomp, size = 2, color= "random-light", shape = "circle", backgroundColor = "black")
-
-#person lines only
-# Filter to necessary column
-textperson <- person_voice$interaction
-
-# Clean text
-docsperson <- Corpus(VectorSource(textperson))
-
-docsperson <- docsperson %>%
-  tm_map(removeNumbers) %>%
-  tm_map(removePunctuation) %>%
-  tm_map(stripWhitespace)
-
-docsperson <- tm_map(docsperson, content_transformer(tolower))
-
-docsperson <- tm_map(docsperson, removeWords, stopwords("english"))
-
-# Create matrix with counts
-dtmperson <- TermDocumentMatrix(docsperson)
-
-matrixperson <- as.matrix(dtmperson) 
-
-wordscomp <- sort(rowSums(matrix),decreasing = TRUE) 
-
-dfperson <- data.frame(word = names(words), freq = words)
 
 # Wordcloud
-wordcloud2(data = dfperson, size = 2, color= "random-light", shape = "circle", backgroundColor = "black")
+compcloud<-wordcloud2(data = dfcomp, size = 0.5, color= "random-light", shape= "circle", backgroundColor = "black")
+
+#library(htmlwidgets)
+#webshot::install_phantomjs()
+#saveWidget(compcloud,"1.html",selfcontained = F)
+#webshot::webshot("1.html","1.png",vwidth = 700, vheight = 500, delay =10)
 ```
 
 *** 
+NEEDS EDITING
 
 When looking at text, something that may come up is how common our choice of words can be. A great way to visualize this idea is with word clouds! A bundle of words with varying size, related to how often that word was used. 
 
-This image was created using the spoken lines from all of the characters and each word was individually counted. Interestingly, "program" appears to be the most common word with 193 uses, however, the most used word was "computer"  with 1036 uses. Wouldn't be much of a word cloud when a single word is the cloud. By removing the extreme outlier we were able to make a beautiful image that visualizes the Star Trek speech.
+This image was created using the spoken lines from the computer and each word was individually counted. Interestingly, "program" appears to be the most common word with 193 uses, however, the most used word was "computer"  with 1036 uses. Wouldn't be much of a word cloud when a single word is the cloud. By removing the extreme outlier we were able to make a beautiful image that visualizes the Star Trek speech.
