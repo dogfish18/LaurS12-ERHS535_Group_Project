@@ -227,14 +227,12 @@ Data source: http://www.speechinteraction.org/TNG/TeaEarlGreyHotDatasetCodeBook.
 
 ```{r, results='hide', include=FALSE}
 
-#Courtney data cleaning
-
+# Courtney data cleaning
 comp_voice <- startrek %>%
   filter(char == c("Computer Voice", "Computer", "Computer (V.O.)", 
          "Computer (V.O)", "Computer Voice (V.O.)", "New Computer Voice", 
          "Com Panel (V.O.)", "Computer'S Voice", "Computer (Voice)", 
          "Computer Voice (Cont'D)"))
-
 
 person_voice <- startrek %>%
   filter(char != "Computer Voice") %>% 
@@ -254,7 +252,7 @@ person_voice <- startrek %>%
 
 ### How common is each word used by the characters?
 ```{r}
-#person lines only
+# Person lines only
 # Filter to necessary column
 textperson <- person_voice$interaction
 
@@ -279,23 +277,18 @@ wordsperson <- sort(rowSums(matrixperson),decreasing = TRUE)
 
 dfperson <- data.frame(word = names(wordsperson), freq = wordsperson)
 
-# Wordcloud
-wordcloud2(data = dfperson, size = 2, color= "random-light", shape = "circle", backgroundColor = "black")
+# Person Wordcloud
+wordcloud2(data = dfperson, size = 2.5, color= "random-light", shape = "circle", backgroundColor = "black")
 ```
 
 ***
-NEEDS NUMBER EDITING
-
 When looking at text, something that may come up is how common our choice of words can be. A great way to visualize this idea is with word clouds! A bundle of words with varying size, related to how often that word was used. 
 
-This image was created using the spoken lines from all of the characters (except the computer) and each word was individually counted. Interestingly, "program" appears to be the most common word with 193 uses, however, the most used word was "computer"  with 1036 uses. Wouldn't be much of a word cloud when a single word is the cloud. By removing the extreme outlier we were able to make a beautiful image that visualizes the Star Trek speech.
+This image was created using the spoken lines from all of the characters (except the computer) and each word was individually counted. Interestingly, "program" appears to be the most common word with 154 uses, however, the most used word was "computer"  with 1025 uses. Wouldn't be much of a word cloud when a single word is the cloud. By removing the extreme outlier we were able to make a beautiful image that visualizes the Star Trek speech.
 
 ### How common is each word used by the computer?
 ```{r}
-# Packages (moved to top)
-
-
-#computer lines only
+# Computer lines only
 # Filter to necessary column
 textcomp <- comp_voice$interaction
 
@@ -321,7 +314,7 @@ wordscomp <- sort(rowSums(matrixcomp),decreasing = TRUE)
 dfcomp <- data.frame(word = names(wordscomp), freq = wordscomp)
 
 
-# Wordcloud
+# Computer Wordcloud
 compcloud<-wordcloud2(data = dfcomp, size = 0.5, color= "random-light", shape= "circle", backgroundColor = "black")
 
 library(htmlwidgets)
@@ -331,8 +324,8 @@ webshot::webshot("1.html","1.png",vwidth = 700, vheight = 500, delay =10)
 ```
 
 *** 
-NEEDS EDITING
+This second word cloud helps us to visually compare the character word choice to the computer word choice. We can see that the computer has limited variability in its word use by the limited size of the cloud. In comparison the characters used 1521 different words compared to the computers 287.
 
-When looking at text, something that may come up is how common our choice of words can be. A great way to visualize this idea is with word clouds! A bundle of words with varying size, related to how often that word was used. 
+This is similar to our use in computer AI technology with Alexa, Cortana, and Siri devises. Though computers can be smart, they only know what we provide them, this typically being simple commands and responses.
 
-This image was created using the spoken lines from the computer and each word was individually counted. Interestingly, "program" appears to be the most common word with 193 uses, however, the most used word was "computer"  with 1036 uses. Wouldn't be much of a word cloud when a single word is the cloud. By removing the extreme outlier we were able to make a beautiful image that visualizes the Star Trek speech.
+Interestingly, with another quick comparison using an inner join, they only share 169 words. This left the computer with 118 unique words and the characters with 1352 unique words. Maybe the computers are more intelligent then we give them credit for...
