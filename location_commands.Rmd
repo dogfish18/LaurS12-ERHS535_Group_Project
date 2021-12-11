@@ -57,11 +57,13 @@ summarise(freqcom)
 ``` {r chartidea}
 freqmap <- ggplot(freqcom, aes(season, char)) +
   geom_tile(aes(fill = n)) +
-  facet_wrap(~ sub_domain, ncol = 1) +
+  facet_wrap(~ sub_domain) +
   scale_fill_viridis_c()+
-  labs(x = "Season", y = "")
+  labs(x = "Season", y = "") + 
+  theme_light()+
+  theme(text = element_text(family = "mono"))
 
 freqmap
-#changed to ncol = 1, but i don't think i like it like this. 
+#removed ncol =1 
 # frequency heat map
 ```
