@@ -48,8 +48,66 @@ Data source: https://github.com/rfordatascience/tidytuesday/blob/master/data/202
 
 ### Chart 2: Kim
 
-```{r}
+```{ r setup}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(forcats)
+startrek<- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-08-17/computer.csv")
 
+```
+
+
+``` {r season_column}
+# 1: 26, 2: 48, 3: 74, 4: 100, 5: 126, 6: 152, 7: 178
+favthings <- startrek %>%
+  mutate(season = case_when(name < 127 ~ '1',
+                            name < 149 ~ '2', 
+                            name < 175 ~ '3',
+                            name < 201 ~ '4',
+                            name < 227 ~ '5',
+                            name < 253 ~ '6',
+                            name < 279 ~ '7'))
+
+#created the season column  
+```
+
+# Filtering the dataset to top characters and certain sub_domains
+``` {r select_domains}
+table(favthings$char)
+favthings <- favthings %>%
+  filter(sub_domain %in% c("Holodeck", "Replicator", "Music")) %>%
+  filter(char %in% c("Beverly", "Data", "Geordi", "Picard", "Riker", "Troi", "Worf"))
+
+```
+
+
+``` {r frequencyvector}
+freqcom <- favthings %>%
+  group_by(char, sub_domain, season) %>%
+  count() %>%
+  ungroup()%>%
+  mutate(char = fct_reorder(char, n, .fun=sum))
+summarise(freqcom)
+
+#grouping and reordering results so it shows up pretty on the heatmap
+```
+
+``` {r chartidea}
+freqmap <- ggplot(freqcom, aes(season, char)) +
+  geom_tile(aes(fill = n)) +
+  facet_wrap(~ sub_domain) +
+  scale_fill_viridis_c()+
+  labs(x = "Season", y = "", 
+       fill = "Frequency", 
+       title = "Entertainment Subdomain Voice Interaction by Season") +
+  theme_classic()+
+  theme(text = element_text(family = "Optima"),
+        legend.position = "bottom")
+
+freqmap
+#removed ncol =1 
+# frequency heat map
 ```
 
 ### Verbal vs. Non-Verbal Computer Responses per Primary Types of Voice Interactions
