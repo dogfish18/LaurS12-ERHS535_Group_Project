@@ -58,7 +58,8 @@ summarise(freqcom)
 freqmap <- ggplot(freqcom, aes(season, char)) +
   geom_tile(aes(fill = n)) +
   facet_wrap(~ sub_domain) +
-  scale_fill_viridis_c()
+  scale_fill_viridis_c()+
+  labs(x = "Season", y = "")
 
 freqmap
 
