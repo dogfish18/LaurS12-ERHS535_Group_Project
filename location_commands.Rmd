@@ -60,7 +60,8 @@ freqmap <- ggplot(freqcom, aes(season, char)) +
   facet_wrap(~ sub_domain) +
   scale_fill_viridis_c()+
   labs(x = "Season", y = "", 
-       fill = "Frequency") + 
+       fill = "Frequency", 
+       title = "Entertainment Subdomain Voice Interaction by Season") +
   theme_classic()+
   theme(text = element_text(family = "Optima"),
         legend.position = "bottom")
