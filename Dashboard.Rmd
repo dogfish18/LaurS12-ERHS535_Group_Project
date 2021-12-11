@@ -49,7 +49,7 @@ Data source: https://github.com/rfordatascience/tidytuesday/blob/master/data/202
 
 ```
 
-### Chart 2: Kim
+### Chart 2: Character Voice Interactions with Entertainment Computers
 
 ``` {r season_column}
 # 1: 26, 2: 48, 3: 74, 4: 100, 5: 126, 6: 152, 7: 178
@@ -72,7 +72,6 @@ favthings <- favthings %>%
   filter(char %in% c("Beverly", "Data", "Geordi", "Picard", "Riker", "Troi", "Worf"))
 # filtering to specific subdomains and main characters
 ```
-
 
 ``` {r frequencyvector}
 freqcom <- favthings %>%
@@ -103,7 +102,9 @@ freqmap
 ```
 
 ***
+In Star Trek, characters may interact with the holodeck, music, or the replicator. In this graphic, we visualize how often the main characters interacted with the computer over each season. 
 
+The holodeck is a 3D simiulation room, "music" is when a character requests the computer to play music, and "replicator" is a device the character can use to create food or drink (similar to a 3D food printer). 
 
 ### Verbal vs. Non-Verbal Computer Responses per Primary Types of Voice Interactions
 
