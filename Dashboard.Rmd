@@ -102,6 +102,9 @@ freqmap
 # frequency heat map
 ```
 
+***
+
+
 ### Verbal vs. Non-Verbal Computer Responses per Primary Types of Voice Interactions
 
 ```{r, results='hide'}
