@@ -61,7 +61,8 @@ freqmap <- ggplot(freqcom, aes(season, char)) +
   scale_fill_viridis_c()+
   labs(x = "Season", y = "") + 
   theme_light()+
-  theme(text = element_text(family = "mono"))
+  theme(text = element_text(family = "Optima"),
+        legend.position = "bottom")
 
 freqmap
 #removed ncol =1 
