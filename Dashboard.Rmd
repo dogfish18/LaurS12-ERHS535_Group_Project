@@ -20,6 +20,9 @@ library(wordcloud)
 library(RColorBrewer)
 library(tm)
 library(wordcloud2)
+library(dplyr)
+library(ggplot2)
+library(forcats)
 
 startrek <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-08-17/computer.csv')
 ```
@@ -48,16 +51,6 @@ Data source: https://github.com/rfordatascience/tidytuesday/blob/master/data/202
 
 ### Chart 2: Kim
 
-```{ r setup}
-library(readr)
-library(dplyr)
-library(ggplot2)
-library(forcats)
-startrek<- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-08-17/computer.csv")
-
-```
-
-
 ``` {r season_column}
 # 1: 26, 2: 48, 3: 74, 4: 100, 5: 126, 6: 152, 7: 178
 favthings <- startrek %>%
@@ -72,13 +65,12 @@ favthings <- startrek %>%
 #created the season column  
 ```
 
-# Filtering the dataset to top characters and certain sub_domains
 ``` {r select_domains}
 table(favthings$char)
 favthings <- favthings %>%
   filter(sub_domain %in% c("Holodeck", "Replicator", "Music")) %>%
   filter(char %in% c("Beverly", "Data", "Geordi", "Picard", "Riker", "Troi", "Worf"))
-
+# filtering to specific subdomains and main characters
 ```
 
 
