@@ -18,6 +18,7 @@ startrek<- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesd
 
 ```
 
+
 ``` {r season_column}
 # 1: 26, 2: 48, 3: 74, 4: 100, 5: 126, 6: 152, 7: 178
 favthings <- startrek %>%
@@ -28,9 +29,11 @@ favthings <- startrek %>%
                             name < 227 ~ '5',
                             name < 253 ~ '6',
                             name < 279 ~ '7'))
-  
+
+#created the season column  
 ```
 
+# Filtering the dataset to top characters and certain sub_domains
 ``` {r select_domains}
 table(favthings$char)
 favthings <- favthings %>%
@@ -38,6 +41,7 @@ favthings <- favthings %>%
   filter(char %in% c("Beverly", "Data", "Geordi", "Picard", "Riker", "Troi", "Worf"))
 
 ```
+
 
 ``` {r frequencyvector}
 freqcom <- favthings %>%
@@ -47,8 +51,7 @@ freqcom <- favthings %>%
   mutate(char = fct_reorder(char, n, .fun=sum))
 summarise(freqcom)
 
-#take out sub domain to see if it works
-#it didn't work
+#grouping and reordering results so it shows up pretty on the heatmap
 ```
 
 ``` {r chartidea}
