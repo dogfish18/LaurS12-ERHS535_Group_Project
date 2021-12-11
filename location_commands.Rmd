@@ -59,8 +59,9 @@ freqmap <- ggplot(freqcom, aes(season, char)) +
   geom_tile(aes(fill = n)) +
   facet_wrap(~ sub_domain) +
   scale_fill_viridis_c()+
-  labs(x = "Season", y = "") + 
-  theme_light()+
+  labs(x = "Season", y = "", 
+       fill = "Frequency") + 
+  theme_classic()+
   theme(text = element_text(family = "Optima"),
         legend.position = "bottom")
 
