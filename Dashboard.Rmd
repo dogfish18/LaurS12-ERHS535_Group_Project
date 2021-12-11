@@ -104,7 +104,7 @@ freqmap
 ***
 In Star Trek, characters may interact with the holodeck, music, or the replicator. In this graphic, we visualize how often the main characters interacted with the computer over each season. 
 
-The holodeck is a 3D simiulation room, "music" is when a character requests the computer to play music, and "replicator" is a device the character can use to create food or drink (similar to a 3D food printer). 
+The holodeck is a 3D simulation room, "music" is when a character requests the computer to play music, and "replicator" is a device the character can use to create food or drink (similar to a 3D food printer). 
 
 ### Verbal vs. Non-Verbal Computer Responses per Primary Types of Voice Interactions
 
