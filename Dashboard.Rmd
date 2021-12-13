@@ -106,6 +106,8 @@ In Star Trek, characters may interact with the holodeck, music, or the replicato
 
 The holodeck is a 3D simulation room, "music" is when a character requests the computer to play music, and "replicator" is a device the character can use to create food or drink (similar to a 3D food printer). 
 
+We can see from the heat map on the left that the holodeck was the subdomain that was interacted with the most, across all seasons and characters. Geordi LaForge interacted with the holodeck the most, primarily in seasons three and four. Picard had the most consistent use of the holodeck over all seasons. It is unique that Geordi had the most interactions with entertainment subdomains across all seasons, because he is not always a main character in the show; however, he often interacts with the holodeck system on behalf of other people (to set holodeck programs to challenge other characters) or for work-related purposes (experimenting with engineering via simulation scenarios). 
+
 ### Verbal vs. Non-Verbal Computer Responses per Primary Types of Voice Interactions
 
 ```{r, results='hide'}
