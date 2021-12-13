@@ -43,15 +43,15 @@ Speech is now common in daily interactions with our devices, thanks to voice use
 Data source: https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-08-17/readme.md
 
 
-### Chart 1: Lauren
+### Lauren
 
 ```{r}
 
 ```
 
-### Chart 2: Character Voice Interactions with Entertainment Computers
+### Character Voice Interactions with Entertainment Computers
 
-``` {r season_column}
+``` {r season_column, results='hide', include=FALSE}
 # 1: 26, 2: 48, 3: 74, 4: 100, 5: 126, 6: 152, 7: 178
 favthings <- startrek %>%
   mutate(season = case_when(name < 127 ~ '1',
@@ -65,7 +65,7 @@ favthings <- startrek %>%
 #created the season column  
 ```
 
-``` {r select_domains}
+``` {r select_domains, results='hide', include=FALSE}
 table(favthings$char)
 favthings <- favthings %>%
   filter(sub_domain %in% c("Holodeck", "Replicator", "Music")) %>%
@@ -73,7 +73,7 @@ favthings <- favthings %>%
 # filtering to specific subdomains and main characters
 ```
 
-``` {r frequencyvector}
+``` {r frequencyvector, results='hide', include=FALSE}
 freqcom <- favthings %>%
   group_by(char, sub_domain, season) %>%
   count() %>%
@@ -269,7 +269,7 @@ Via the data visualizations created from proportion tests, we can see that Wake 
 
 Data source: http://www.speechinteraction.org/TNG/TeaEarlGreyHotDatasetCodeBook.pdf
 
-### Chart 4: Stacey
+### Stacey
 
 ```{r}
 
